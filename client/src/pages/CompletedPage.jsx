@@ -32,13 +32,13 @@ export default function CompletedPage() {
             동일 기기에서는 한 회차에 한 번만 응답할 수 있습니다.
           </p>
 
-          {response?.results && (
+          {response && (
             <button
               className="btn btn-outline"
               style={{ marginTop: 20 }}
               onClick={() => {
                 const adminId = getCurrentAdminId();
-                const completedId = getCompletedResponseId(adminId);
+                const completedId = getCompletedResponseId(adminId) || response.id;
                 if (completedId) {
                   navigate(`/result?admin=${adminId}`);
                 }
