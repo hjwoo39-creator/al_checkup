@@ -31,22 +31,7 @@ export default function CompletedPage() {
           <p className="card-desc">
             동일 기기에서는 한 회차에 한 번만 응답할 수 있습니다.
           </p>
-          {response && (
-            <div className="result-score-grid" style={{ marginTop: 20 }}>
-              <div className="score-item">
-                <div className="label">죄책감</div>
-                <div className="value">{response.impatienceScore}점</div>
-              </div>
-              <div className="score-item">
-                <div className="label">운전능력 과신</div>
-                <div className="value">{response.conformityScore}점</div>
-              </div>
-              <div className="score-item">
-                <div className="label">잘못된 손익계산</div>
-                <div className="value">{response.riskScore}점</div>
-              </div>
-            </div>
-          )}
+
           {response?.results && (
             <button
               className="btn btn-outline"
