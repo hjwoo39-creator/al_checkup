@@ -1,0 +1,16 @@
+{
+  "name": "driving-checklist-system",
+  "version": "1.0.0",
+  "description": "음주진단 자가진단 체크리스트 시스템",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "postinstall": "npm install --prefix server && npm install --prefix client",
+    "build": "npm run build --prefix client",
+    "start": "npm run build && npm start --prefix server",
+    "start:server": "npm start --prefix server"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  }
+}
