@@ -421,8 +421,10 @@ export async function purgeOldResponses() {
   const sql = isPostgres
     ? "DELETE FROM responses WHERE (created_at at time zone 'Asia/Seoul')::date < (now() at time zone 'Asia/Seoul')::date"
     : "DELETE FROM responses WHERE date(created_at, 'localtime') < date('now', 'localtime')";
-  await queryRun(sql);
-  await queryRun('DELETE FROM active_connections WHERE session_id NOT IN (SELECT id FROM sessions)');
+  const deleted = await queryRun(sql);
+console.log('[PURGE RESPONSES DELETED]', deleted);
+
+await queryRun('DELETE FROM active_connections WHERE session_id NOT IN (SELECT id FROM sessions)');
 }
 
 export async function createResponse(sessionId, deviceId) {
