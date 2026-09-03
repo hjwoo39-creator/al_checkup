@@ -19,10 +19,11 @@ let pgPool = null;
 let sqliteDb = null;
 
 if (isPostgres) {
-  pgPool = new pg.Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
-  });
+ pgPool = new pg.Pool({ 
+  connectionString: process.env.DATABASE_URL, 
+  ssl: { rejectUnauthorized: false },
+  max: 1
+});
 } else {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
   if (!fs.existsSync(BACKUP_DIR)) fs.mkdirSync(BACKUP_DIR, { recursive: true });
@@ -57,6 +58,7 @@ export async function queryAll(sql, params = []) {
 }
 
 export async function queryRun(sql, params = []) {
+  console.log('[QUERY RUN]', sql.substring(0,100), params);
   if (isPostgres) {
     const pgSql = convertPlaceholders(sql);
     const res = await pgPool.query(pgSql, params);
