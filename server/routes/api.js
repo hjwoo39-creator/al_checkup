@@ -171,9 +171,14 @@ export function registerRoutes(app, port) {
     res.json({ exists: true, completed: false, response: formatResponse(response) });
   });
 
-  app.patch('/api/responses/:id', async (req, res) => {
-    const response = await getResponseById(req.params.id);
-    if (!response) return res.status(404).json({ error: '응답을 찾을 수 없습니다.' });
+app.patch('/api/responses/:id', async (req, res) => {
+  console.log('[PATCH RESPONSE] requested id:', req.params.id);
+
+  const response = await getResponseById(req.params.id);
+
+  console.log('[PATCH RESPONSE] found:', response);
+
+  if (!response) return res.status(404).json({ error: '응답을 찾을 수 없습니다.' });
     if (response.status === 'completed') {
       return res.status(409).json({ error: 'already_completed', message: '이미 응답이 완료되었습니다.' });
     }
