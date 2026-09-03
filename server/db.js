@@ -24,6 +24,10 @@ if (isPostgres) {
   ssl: { rejectUnauthorized: false },
   max: 1
 });
+ pgPool.on('connect', async (client) => {
+  const result = await client.query('SELECT current_database(), current_schema()');
+  console.log('[DB INFO]', result.rows[0]);
+});
 } else {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
   if (!fs.existsSync(BACKUP_DIR)) fs.mkdirSync(BACKUP_DIR, { recursive: true });
