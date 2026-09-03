@@ -10,7 +10,12 @@ async function request(url, options = {}) {
     // 404 에러(데이터 없음)가 난 경우 예외 처리
     if (res.status === 404 && url.startsWith('/responses/')) {
       alert('진행 중인 설문 정보를 찾을 수 없습니다. 메인 화면으로 이동합니다.');
-      localStorage.clear(); // 저장된 만료 데이터 정리
+      
+// 관리자 로그인 토큰을 보호하기 위해 설문 관련 데이터만 선택 삭제
+      localStorage.removeItem('driving_checklist_response_id');
+      localStorage.removeItem('driving_checklist_response_id_5');
+      localStorage.removeItem('driving_checklist_device_id');
+      
       window.location.href = '/'; // 메인으로 리다이렉트
       return;
     }
