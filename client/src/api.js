@@ -4,7 +4,17 @@ async function request(url, options = {}) {
   const headers = { 'Content-Type': 'application/json', ...options.headers };
   const res = await fetch(`${API_BASE}${url}`, { ...options, headers });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) {
+ // 260904 수정
+ 
+ if (!res.ok) {
+    // 404 에러(데이터 없음)가 난 경우 예외 처리
+    if (res.status === 404 && url.startsWith('/responses/')) {
+      alert('진행 중인 설문 정보를 찾을 수 없습니다. 메인 화면으로 이동합니다.');
+      localStorage.clear(); // 저장된 만료 데이터 정리
+      window.location.href = '/'; // 메인으로 리다이렉트
+      return;
+    }
+
     const err = new Error(data.error || data.message || '요청 실패');
     err.status = res.status;
     err.data = data;
@@ -12,7 +22,7 @@ async function request(url, options = {}) {
   }
   return data;
 }
-
+//
 export const api = {
   getServerInfo: (adminId) => request(`/server-info?admin=${encodeURIComponent(adminId || 1)}`),
   getQuestions: () => request('/questions'),
@@ -25,6 +35,7 @@ export const api = {
     request(`/responses/check/${deviceId}?admin=${encodeURIComponent(adminId || 1)}`),
   updateResponse: (id, body) =>
     request(`/responses/${id}`, { method: 'PATCH', body: JSON.stringify(body) }),
+  getResponse: (id) => request(`/responses/${id}`), // <-- 이 줄 추가
   getResult: (id) => request(`/responses/${id}/result`),
   adminLogin: (adminName, password) =>
     request('/admin/login', { method: 'POST', body: JSON.stringify({ adminName, password }) }),
