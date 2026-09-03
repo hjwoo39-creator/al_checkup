@@ -389,7 +389,14 @@ export async function getResponseByDevice(sessionId, deviceId) {
 }
 
 export async function getResponseById(id) {
-  return queryGet('SELECT * FROM responses WHERE id = ?', [Number(id)]);
+  const row = await queryGet(
+    'SELECT * FROM responses WHERE id = ?',
+    [Number(id)]
+  );
+
+  console.log('[GET RESPONSE BY ID]', id, '=>', row);
+
+  return row;
 }
 
 export async function deleteResponse(id) {
@@ -422,13 +429,13 @@ export async function createResponse(sessionId, deviceId) {
     [Number(sessionId), deviceId, 'in_progress', '{}']
   );
 
-  console.log('[CREATE RESPONSE] INSERT returned:', row);
+  console.log('[INSERT ID]', row.id);
 
-  const created = await getResponseById(Number(row.id));
+  const result = await getResponseById(Number(row.id));
 
-  console.log('[CREATE RESPONSE] SELECT after INSERT:', created);
+  console.log('[AFTER INSERT GET]', result);
 
-  return created;
+  return result;
 }
 
 export async function updateResponse(id, data) {
