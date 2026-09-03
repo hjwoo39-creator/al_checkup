@@ -421,7 +421,14 @@ export async function createResponse(sessionId, deviceId) {
     'INSERT INTO responses (session_id, device_id, status, answers_json) VALUES (?, ?, ?, ?) RETURNING id',
     [Number(sessionId), deviceId, 'in_progress', '{}']
   );
-  return getResponseById(Number(row.id));
+
+  console.log('[CREATE RESPONSE] INSERT returned:', row);
+
+  const created = await getResponseById(Number(row.id));
+
+  console.log('[CREATE RESPONSE] SELECT after INSERT:', created);
+
+  return created;
 }
 
 export async function updateResponse(id, data) {
