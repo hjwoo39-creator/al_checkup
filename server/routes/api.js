@@ -155,6 +155,15 @@ export function registerRoutes(app, port) {
     res.json({ response: formatResponse(response), sessionId: session.id });
   });
 
+
+// 서버 오류 관련 추가한 부분 
+
+app.get('/api/responses/:id', async (req, res) => {
+    const response = await getResponseById(req.params.id);
+    if (!response) return res.status(404).json({ error: '응답을 찾을 수 없습니다.' });
+    res.json({ response: formatResponse(response) });
+  });
+  //
   app.get('/api/responses/check/:deviceId', async (req, res) => {
     const session = await getActiveSessionByAdmin(getAdminId(req));
     if (!session) return res.json({ exists: false });
