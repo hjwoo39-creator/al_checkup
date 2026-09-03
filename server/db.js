@@ -24,8 +24,14 @@ if (isPostgres) {
   ssl: { rejectUnauthorized: false },
   max: 1
 });
- pgPool.on('connect', async (client) => {
-  const result = await client.query('SELECT current_database(), current_schema()');
+pgPool.on('connect', async (client) => {
+  const result = await client.query(`
+    SELECT 
+      inet_server_addr(),
+      inet_server_port(),
+      current_user,
+      version()
+  `);
   console.log('[DB INFO]', result.rows[0]);
 });
 } else {
